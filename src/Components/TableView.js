@@ -14,7 +14,11 @@ class TableView extends Component {
         columFilteredData: [],
         currentPage: 1,
         loading: true,
-        apiData: []
+        apiData: [],
+        activeColumn: {
+            type: null,
+            field: null
+        }
 
     }
     componentDidMount() {
@@ -24,15 +28,18 @@ class TableView extends Component {
         try {
             let apiResult = await axios.get('http://demo9197058.mockable.io/users');
             let { data } = apiResult;
+            let { currentPage } = this.state;
+            let paginationData = this.setPaginationData(currentPage, data.length)
+            let { startIndex, lastIndex } = pagination(paginationData);
 
-            this.setState({ data, apiData: data, totalPage: data.length, loading: false });
+            this.setState({ data: data.slice(startIndex, lastIndex), apiData: data, totalPage: data.length, loading: false });
         }
         catch (e) {
             console.log(e);
             this.setState({ loading: false });
         }
     }
-    setPaginationData = () => {
+    setPaginationData = (currentPage, totalPage) => {
         let paginationData = {
             currentPage,
             totalItems: totalPage,
@@ -42,25 +49,42 @@ class TableView extends Component {
         return paginationData;
     }
     handleColumnClick = (field, startIndex, lastIndex) => {
-        let sortedData = this.state.data.slice(startIndex, lastIndex).sort(sortColumn("asc", field));
+        //Return if no data found
+        if (this.state.data.length === 0) return null;
+        let { activeColumn: { type } } = this.state;
+        type = type === "asc" ? "desc" : "asc";
+        this.setState({ activeColumn: { field, type } });
+        let sortedData = this.state.apiData.slice(startIndex, lastIndex).sort(sortColumn(type, field));
         this.setState({ data: sortedData });
-        console.log(sortedData);
-        console.log(field, startIndex, lastIndex);
+
     }
     handlePaginationClick = (page) => {
-        this.setState({ currentPage: page, data: this.state.apiData });
+        let paginationData = this.setPaginationData(page + 1, this.state.totalPage);
+        let { startIndex, lastIndex } = pagination(paginationData);
+        this.setState({
+            currentPage: page, data: this.state.apiData.slice(startIndex, lastIndex), activeColumn: {
+                type: null,
+                field: null
+            }
+        });
     }
     handleChange = (e) => {
 
         let filteredData = this.state.apiData.filter((data) => {
             return data.first_name.toLowerCase().startsWith(e.target.value.trim().toLowerCase());
         });
+        let paginationData = this.setPaginationData(this.state.currentPage, filteredData.length);
+        let { startIndex, lastIndex } = pagination(paginationData);
 
-        this.setState({ data: filteredData, totalPage: filteredData.length })
-        console.log(filteredData);
+        this.setState({
+            data: filteredData.slice(startIndex, lastIndex), totalPage: filteredData.length, activeColumn: {
+                type: null,
+                field: null
+            }
+        })
     }
     render() {
-        let { data, totalPage, currentPage } = this.state;
+        let { data, totalPage, currentPage, activeColumn } = this.state;
         if (this.state.loading) return null;
 
         let paginationData = {
@@ -69,17 +93,16 @@ class TableView extends Component {
             maxPages: 5,
             pageSize: 5
         }
-        console.log("THIS", this.state.data);
         let { totalPages, currentPage: activePage, startIndex, lastIndex, pagesToDisplay } = pagination(paginationData);
         const tableHeading = (
-            <TableHeading handleColumnClick={this.handleColumnClick} startIndex={startIndex} lastIndex={lastIndex} />
+            <TableHeading handleColumnClick={this.handleColumnClick} startIndex={startIndex} lastIndex={lastIndex} activeColumn={activeColumn} />
         );
         return (
             <div>
                 <Row className="mt-2 mb-2">
                     <Col md="3"><Input type="email" name="email" id="exampleEmail" placeholder="Search with first name" onChange={this.handleChange} /></Col>
                 </Row>
-                <TableData tableData={data.slice(startIndex, lastIndex)} tableHeading={tableHeading} />
+                <TableData tableData={data} tableHeading={tableHeading} />
                 <CustomPagination page={pagesToDisplay} totalPages={totalPages} currentPage={activePage} handlePaginationClick={this.handlePaginationClick} />
             </div>
         )

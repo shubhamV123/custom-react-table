@@ -2,6 +2,7 @@ import React from 'react'
 import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import '../index.css';
 const CustomPagination = ({ page, currentPage, handlePaginationClick, totalPages }) => {
+    if (totalPages === 0) return null;
     let prevButtonDisabled = currentPage === 1;
     let nextButtonDisabled = currentPage === totalPages;
     return (

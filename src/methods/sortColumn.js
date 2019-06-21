@@ -4,7 +4,6 @@ const sortColumn = (type, property) => {
         sortOrder = -1;
     }
     return function (a, b) {
-        console.log(typeof b[property] === "number", a, a[property] > b[property])
         if (sortOrder === -1) {//descending
             if (typeof b[property] === "number") {
                 return b[property] - a[property];

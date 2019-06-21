@@ -1,19 +1,19 @@
-import React from 'react'
+import React from 'react';
 
-const TableHeading = ({ handleColumnClick, startIndex, lastIndex }) => {
-    console.log(startIndex, lastIndex)
+const TABLE_HEADINGS = ["first_name", "last_name", "company_name", "city", "state", "zip", "email", "web", "age"];
+
+const TableHeading = ({ handleColumnClick, startIndex, lastIndex, activeColumn }) => {
+    let { field, type } = activeColumn;
     return (
         <thead>
             <tr>
-                <th onClick={() => handleColumnClick('first_name', startIndex, lastIndex)}>First Name</th>
-                <th onClick={() => handleColumnClick('last_name', startIndex, lastIndex)}>Last Name</th>
-                <th onClick={() => handleColumnClick('company_name', startIndex, lastIndex)}>Company Name</th>
-                <th onClick={() => handleColumnClick('city', startIndex, lastIndex)}>City</th>
-                <th onClick={() => handleColumnClick('state', startIndex, lastIndex)}>State</th>
-                <th onClick={() => handleColumnClick('zip', startIndex, lastIndex)}>Zip</th>
-                <th onClick={() => handleColumnClick('email', startIndex, lastIndex)}>Email</th>
-                <th onClick={() => handleColumnClick('web', startIndex, lastIndex)}>Web</th>
-                <th onClick={() => handleColumnClick('age', startIndex, lastIndex)}>age</th>
+                {TABLE_HEADINGS.map((heading => {
+                    return (<th className={field === heading ? "active" : ""}
+                        onClick={() => handleColumnClick(heading, startIndex, lastIndex)}>
+                        {heading} {field === heading ?
+                            <i class={`${type === "asc" ? "fa fa-arrow-up" : "fa fa-arrow-down"}`}></i> : null}
+                    </th>)
+                }))}
             </tr>
         </thead>
     )
