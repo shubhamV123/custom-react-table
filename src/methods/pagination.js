@@ -10,16 +10,18 @@ function pagination({ currentPage, totalItems, pageSize = 5, maxPages = 5 }) {
         currentPage = totalPages
     }
     let startPage, endPage;
+
+    let maxPagesBeforeCurrentPage, maxPagesAfterCurrentPage;
+    maxPagesBeforeCurrentPage = Math.floor(maxPages / 2);
+    maxPagesAfterCurrentPage = Math.ceil(maxPages / 2) - 1;
     // If totalPages is less than max pages show all pages
     if (totalPages < maxPages) {
         startPage = 1;
         endPage = totalPages;
     }
-    let maxPagesBeforeCurrentPage, maxPagesAfterCurrentPage;
-    maxPagesBeforeCurrentPage = Math.floor(maxPages / 2);
-    maxPagesAfterCurrentPage = Math.ceil(maxPages / 2) - 1;
+
     //Page nearby startpage
-    if (currentPage <= maxPagesBeforeCurrentPage) {
+    else if (currentPage <= maxPagesBeforeCurrentPage) {
         startPage = 1;
         endPage = maxPages
     }

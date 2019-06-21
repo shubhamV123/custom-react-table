@@ -1,2 +1,3 @@
 import pagination from './pagination';
-export { pagination }
+import sortColumn from './sortColumn';
+export { pagination, sortColumn }

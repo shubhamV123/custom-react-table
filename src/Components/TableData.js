@@ -6,6 +6,7 @@ const TableData = ({ tableData, tableHeading }) => {
         <Table>
             {tableHeading}
             <tbody>
+                {tableData.length === 0 ? <div>No result found</div> : null}
                 <TableRows tableData={tableData} />
             </tbody>
 
