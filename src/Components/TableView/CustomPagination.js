@@ -1,6 +1,5 @@
 import React from 'react'
 import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
-import '../index.css';
 const CustomPagination = ({ page, currentPage, handlePaginationClick, totalPages }) => {
     if (totalPages === 0) return null;
     let prevButtonDisabled = currentPage === 1;
@@ -17,7 +16,7 @@ const CustomPagination = ({ page, currentPage, handlePaginationClick, totalPages
             </PaginationItem>
             {page.map(data => {
                 return (
-                    <PaginationItem onClick={() => handlePaginationClick(data)} active={data === currentPage}>
+                    <PaginationItem key={data + "pagination"} onClick={() => handlePaginationClick(data)} active={data === currentPage}>
                         <PaginationLink href="#">
                             {data}
                         </PaginationLink>

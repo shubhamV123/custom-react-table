@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 const DataContext = React.createContext();
+//A Provider to fetch api data once when app is load;
 
 class DataProvider extends Component {
     state = {

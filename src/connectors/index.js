@@ -1,5 +1,5 @@
 import React from 'react';
-import { DataConsumer, DataProvider } from '../context/DataProvider'
+import { DataConsumer } from '../context/DataProvider'
 
 const connectData = (ConnectedComponent) => {
     return (props) => (<DataConsumer>

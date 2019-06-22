@@ -1,4 +1,4 @@
-import DetailView from './DetailsView';
+import DetailsView from './DetailsView';
 import TableView from './TableView';
 
-export { DetailView, TableView };
+export { DetailsView, TableView };

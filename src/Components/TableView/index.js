@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { Input, Row, Col } from 'reactstrap';
-import TableData from './TableData';
-import { connectData } from '../connectors';
+import GenerateTable from './GenerateTable';
+import { connectData } from '../../connectors';
 
 import TableHeading from './TableHeading';
 import CustomPagination from './CustomPagination';
-import { pagination, sortColumn } from '../methods/';
+import { pagination, sortColumn } from '../../methods';
+//A table view with pagination and search functionality
 class TableView extends Component {
     state = {
         pageCount: 1,
@@ -96,7 +97,7 @@ class TableView extends Component {
                 <Row className="mt-2 mb-2">
                     <Col md="3"><Input type="email" name="email" id="exampleEmail" placeholder="Search with first name" onChange={this.handleChange} /></Col>
                 </Row>
-                <TableData tableData={data} tableHeading={tableHeading} />
+                <GenerateTable tableData={data} tableHeading={tableHeading} />
                 <CustomPagination page={pagesToDisplay} totalPages={totalPages}
                     currentPage={activePage}
                     handlePaginationClick={this.handlePaginationClick} />
