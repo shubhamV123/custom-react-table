@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Input, Row, Col } from 'reactstrap';
-import axios from 'axios';
 import TableData from './TableData';
+import { connectData } from '../connectors';
+
 import TableHeading from './TableHeading';
 import CustomPagination from './CustomPagination';
 import { pagination, sortColumn } from '../methods/';
@@ -22,23 +23,16 @@ class TableView extends Component {
 
     }
     componentDidMount() {
-        this.fetchData();
+        this.setInitialPageData();
     }
-    fetchData = async () => {
-        try {
-            let apiResult = await axios.get('http://demo9197058.mockable.io/users');
-            let { data } = apiResult;
-            let { currentPage } = this.state;
-            let paginationData = this.setPaginationData(currentPage, data.length)
-            let { startIndex, lastIndex } = pagination(paginationData);
+    setInitialPageData() {
+        let data = this.props.apiData;
+        let { currentPage } = this.state;
+        let paginationData = this.setPaginationData(currentPage, data.length);
+        let { startIndex, lastIndex } = pagination(paginationData);
+        this.setState({ data: data.slice(startIndex, lastIndex), apiData: data, totalPage: data.length, loading: false });
+    }
 
-            this.setState({ data: data.slice(startIndex, lastIndex), apiData: data, totalPage: data.length, loading: false });
-        }
-        catch (e) {
-            console.log(e);
-            this.setState({ loading: false });
-        }
-    }
     setPaginationData = (currentPage, totalPage) => {
         let paginationData = {
             currentPage,
@@ -73,11 +67,11 @@ class TableView extends Component {
         let filteredData = this.state.apiData.filter((data) => {
             return data.first_name.toLowerCase().startsWith(e.target.value.trim().toLowerCase());
         });
-        let paginationData = this.setPaginationData(this.state.currentPage, filteredData.length);
+        let paginationData = this.setPaginationData(1, filteredData.length);
         let { startIndex, lastIndex } = pagination(paginationData);
 
         this.setState({
-            data: filteredData.slice(startIndex, lastIndex), totalPage: filteredData.length, activeColumn: {
+            data: filteredData.slice(startIndex, lastIndex), currentPage: 1, totalPage: filteredData.length, activeColumn: {
                 type: null,
                 field: null
             }
@@ -85,7 +79,7 @@ class TableView extends Component {
     }
     render() {
         let { data, totalPage, currentPage, activeColumn } = this.state;
-        if (this.state.loading) return null;
+        if (this.props.loading) return null;
 
         let paginationData = {
             currentPage,
@@ -103,9 +97,11 @@ class TableView extends Component {
                     <Col md="3"><Input type="email" name="email" id="exampleEmail" placeholder="Search with first name" onChange={this.handleChange} /></Col>
                 </Row>
                 <TableData tableData={data} tableHeading={tableHeading} />
-                <CustomPagination page={pagesToDisplay} totalPages={totalPages} currentPage={activePage} handlePaginationClick={this.handlePaginationClick} />
+                <CustomPagination page={pagesToDisplay} totalPages={totalPages}
+                    currentPage={activePage}
+                    handlePaginationClick={this.handlePaginationClick} />
             </div>
         )
     }
 }
-export default TableView;
+export default connectData(TableView);

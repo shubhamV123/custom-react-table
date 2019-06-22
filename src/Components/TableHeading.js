@@ -1,4 +1,5 @@
 import React from 'react';
+import { formatKeyValues } from '../formatter'
 
 const TABLE_HEADINGS = ["first_name", "last_name", "company_name", "city", "state", "zip", "email", "web", "age"];
 
@@ -8,9 +9,9 @@ const TableHeading = ({ handleColumnClick, startIndex, lastIndex, activeColumn }
         <thead>
             <tr>
                 {TABLE_HEADINGS.map((heading => {
-                    return (<th className={field === heading ? "active" : ""}
+                    return (<th className={`${field === heading ? "active" : ""} cursor-pointer`}
                         onClick={() => handleColumnClick(heading, startIndex, lastIndex)}>
-                        {heading} {field === heading ?
+                        {formatKeyValues(heading)} {field === heading ?
                             <i class={`${type === "asc" ? "fa fa-arrow-up" : "fa fa-arrow-down"}`}></i> : null}
                     </th>)
                 }))}
