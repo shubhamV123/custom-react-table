@@ -1,5 +1,5 @@
 # Custom Table
-A poc of table  with pagination,sorting and filtering in [React](https://reactjs.org/)(without using any third party librabry).
+A poc of table  with pagination,sorting and filtering in [React](https://reactjs.org/) (without using any third party library).
 
 ## Getting Started
 

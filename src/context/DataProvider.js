@@ -14,7 +14,7 @@ class DataProvider extends Component {
     }
     fetchData = async () => {
         try {
-            let apiResult = await axios.get('http://demo9197058.mockable.io/users');
+            let apiResult = await axios.get('https://api.myjson.com/bins/sxhol');
             let { data } = apiResult;
             this.setState({ apiData: data, loading: false });
         }
@@ -25,7 +25,7 @@ class DataProvider extends Component {
     }
 
     render() {
-        if (this.state.loading) return null;
+        if (this.state.loading) return <div>Loading...</div>;
         let { apiData, loading } = this.state;
         return (
             <DataContext.Provider
