@@ -14,7 +14,7 @@ class DataProvider extends Component {
     }
     fetchData = async () => {
         try {
-            let apiResult = await axios.get('https://api.myjson.com/bins/sxhol');
+            let apiResult = await axios.get('https://raw.githubusercontent.com/shubhamV123/custom-react-table/master/data.json');
             let { data } = apiResult;
             this.setState({ apiData: data, loading: false });
         }
