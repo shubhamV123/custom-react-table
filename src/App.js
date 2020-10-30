@@ -1,6 +1,6 @@
 import React from 'react'
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { DetailsView, TableView } from 'Components';
+import { DetailsView, TableView } from './components';
 import { DataProvider } from './context/DataProvider';
 //Added Provider so that we do not need to hit api more than once i.e it hold apiData until app is mounted and do not need to make another api call
 const App = () => {
